@@ -31,6 +31,7 @@ func (s *PostServiceServer) CreatePost(ctx context.Context, request *postpb.Crea
 	post := request.GetPost()
 
 	data := model.Post{
+		ID:      primitive.NewObjectID(),
 		Title:   post.GetTitle(),
 		Content: post.GetContent(),
 	}
@@ -186,7 +187,6 @@ func main() {
 
 	postpb.RegisterPostServiceServer(s, srv)
 
-	// Initialize MongoDb client
 	fmt.Println("Connecting to MongoDB...")
 	mongoCtx = context.Background()
 	db, err = mongo.Connect(mongoCtx, options.Client().ApplyURI("mongodb+srv://roney:candy1989@cluster0.fpwgl.mongodb.net/kleverdb?retryWrites=true&w=majority"))
@@ -200,7 +200,7 @@ func main() {
 		fmt.Println("Connected to Mongodb")
 	}
 
-	postDB = db.Database("kleverdb").Collection("post")
+	postDB = db.Database("kleverdb").Collection("posts")
 
 	go func() {
 		if err := s.Serve(listener); err != nil {

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/api/annotations.proto";
+
 package proto;
 
 option go_package = "postpb";
@@ -50,7 +52,13 @@ message ListPostsResponse {
 }
 
 service PostService {
-  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse) {
+    option (google.api.http) = {
+      post: "/v1/posts"
+      body: "*"
+    };
+  }
+
   rpc GetPost(GetPostRequest) returns (GetPostResponse);
   rpc UpdatePost(UpdatePostRequest) returns (UpdatePostResponse);
   rpc DeletePost(DeletePostRequest) returns (DeletePostResponse);
