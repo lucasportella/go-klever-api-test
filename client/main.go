@@ -34,7 +34,50 @@ func main() {
 		req := &postpb.CreatePostRequest{
 			Post: &post,
 		}
-		_, err := client.CreatePost(c, req)
+		res, err := client.CreatePost(c, req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, res.Post)
+	})
+
+	r.GET("/posts/:id", func(c *gin.Context) {
+		id := c.Param("id")
+
+		req := &postpb.GetPostRequest{Id: id}
+		res, err := client.GetPost(c, req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, res.Post)
+	})
+
+	r.GET("/posts/", func(c *gin.Context) {
+
+		req := &postpb.ListPostsRequest{}
+		_, err := client.ListPosts(c, req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, &postpb.ListPostsRequest{})
+	})
+
+	r.DELETE("/posts/:id", func(c *gin.Context) {
+		id := c.Param("id")
+
+		req := &postpb.DeletePostRequest{Id: id}
+		_, err := client.DeletePost(c, req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
@@ -43,11 +86,32 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"result": fmt.Sprint("TeuCu"),
+			"This post was deleted": fmt.Sprint(id),
 		})
 	})
 
-	// Run http server
+	r.PUT("/posts/", func(c *gin.Context) {
+		post := postpb.Post{}
+
+		if err := c.ShouldBindJSON(&post); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Missing values"})
+			return
+		}
+
+		req := &postpb.UpdatePostRequest{
+			Post: &post,
+		}
+		res, err := client.UpdatePost(c, req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, res.Post)
+	})
+
 	if err := r.Run(":8052"); err != nil {
 		log.Fatalf("could not run server: %v", err)
 	}

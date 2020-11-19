@@ -48,6 +48,7 @@ func (s *PostServiceServer) CreatePost(ctx context.Context, request *postpb.Crea
 
 	oid := result.InsertedID.(primitive.ObjectID)
 	post.Id = oid.Hex()
+	post.Votes = 0
 
 	return &postpb.CreatePostResponse{Post: post}, nil
 }
@@ -70,6 +71,7 @@ func (s *PostServiceServer) GetPost(ctx context.Context, request *postpb.GetPost
 			Id:      oid.Hex(),
 			Title:   data.Title,
 			Content: data.Content,
+			Votes:   data.Votes,
 		},
 	}
 	return response, nil
@@ -114,6 +116,7 @@ func (s *PostServiceServer) ListPosts(request *postpb.ListPostsRequest, stream p
 				Id:      data.ID.Hex(),
 				Content: data.Content,
 				Title:   data.Title,
+				Votes:   data.Votes,
 			},
 		})
 	}
