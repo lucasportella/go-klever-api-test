@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -77,7 +76,7 @@ func main() {
 		id := c.Param("id")
 
 		req := &postpb.DeletePostRequest{Id: id}
-		_, err := client.DeletePost(c, req)
+		res, err := client.DeletePost(c, req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
@@ -86,8 +85,10 @@ func main() {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"This post was deleted": fmt.Sprint(id),
+			"Id:":           id,
+			"Post deleted:": res.Success,
 		})
+
 	})
 
 	r.PUT("/posts/", func(c *gin.Context) {
@@ -102,6 +103,50 @@ func main() {
 			Post: &post,
 		}
 		res, err := client.UpdatePost(c, req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, res.Post)
+	})
+
+	r.PUT("/posts/upvote", func(c *gin.Context) {
+		post := postpb.Post{}
+		if err := c.ShouldBindJSON(&post); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Missing values"})
+			return
+		}
+		req := &postpb.UpVoteRequest{
+			Post: &post,
+		}
+
+		res, err := client.UpVote(c, req)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, res.Post)
+	})
+
+	r.PUT("/posts/downvote", func(c *gin.Context) {
+		post := postpb.Post{}
+
+		if err := c.ShouldBindJSON(&post); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Missing values"})
+			return
+		}
+
+		req := &postpb.DownVoteRequest{
+			Post: &post,
+		}
+
+		res, err := client.DownVote(c, req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),

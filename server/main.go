@@ -83,7 +83,12 @@ func (s *PostServiceServer) DeletePost(ctx context.Context, request *postpb.Dele
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Could not convert to ObjectId: %v", err))
 	}
 
-	_, err = postDB.DeleteOne(ctx, bson.M{"_id": oid})
+	filter := bson.M{"_id": oid}
+
+	result := postDB.FindOneAndDelete(ctx, filter)
+
+	decoded := model.Post{}
+	err = result.Decode(&decoded)
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Could not find/delete post with id %s: %v", request.GetId(), err))
 	}
@@ -166,6 +171,92 @@ func (s *PostServiceServer) UpdatePost(ctx context.Context, request *postpb.Upda
 			Id:      decoded.ID.Hex(),
 			Title:   decoded.Title,
 			Content: decoded.Content,
+			Votes:   decoded.Votes,
+		},
+	}, nil
+}
+
+func (s *PostServiceServer) UpVote(ctx context.Context, request *postpb.UpVoteRequest) (*postpb.UpVoteResponse, error) {
+	post := request.GetPost()
+	oid, err := primitive.ObjectIDFromHex(post.GetId())
+
+	if err != nil {
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			fmt.Sprintf("Could not convert the supplied post id to a MongoDB ObjectId: %v", err),
+		)
+	}
+
+	// Convert the data to be updated into an unordered Bson document
+	update := bson.M{
+		"votes": post.GetVotes(),
+	}
+
+	// Convert the oid into an unordered bson document to search by id
+	filter := bson.M{"_id": oid}
+
+	// Result is the BSON encoded result
+	// To return the updated document instead of original we have to add options.
+	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+
+	// Decode result and write it to 'decoded'
+	decoded := model.Post{}
+	err = result.Decode(&decoded)
+	if err != nil {
+		return nil, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("Could not find post with supplied ID: %v", err),
+		)
+	}
+	return &postpb.UpVoteResponse{
+		Post: &postpb.Post{
+			Id:      decoded.ID.Hex(),
+			Title:   decoded.Title,
+			Content: decoded.Content,
+			Votes:   decoded.Votes,
+		},
+	}, nil
+}
+
+func (s *PostServiceServer) DownVote(ctx context.Context, request *postpb.DownVoteRequest) (*postpb.DownVoteResponse, error) {
+
+	post := request.GetPost()
+
+	oid, err := primitive.ObjectIDFromHex(post.GetId())
+	if err != nil {
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			fmt.Sprintf("Could not convert the supplied post id to a MongoDB ObjectId: %v", err),
+		)
+	}
+
+	// Convert the data to be updated into an unordered Bson document
+	update := bson.M{
+		"votes": post.GetVotes(),
+	}
+
+	// Convert the oid into an unordered bson document to search by id
+	filter := bson.M{"_id": oid}
+
+	// Result is the BSON encoded result
+	// To return the updated document instead of original we have to add options.
+	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+
+	// Decode result and write it to 'decoded'
+	decoded := model.Post{}
+	err = result.Decode(&decoded)
+	if err != nil {
+		return nil, status.Errorf(
+			codes.NotFound,
+			fmt.Sprintf("Could not find post with supplied ID: %v", err),
+		)
+	}
+	return &postpb.DownVoteResponse{
+		Post: &postpb.Post{
+			Id:      decoded.ID.Hex(),
+			Title:   decoded.Title,
+			Content: decoded.Content,
+			Votes:   decoded.Votes,
 		},
 	}, nil
 }

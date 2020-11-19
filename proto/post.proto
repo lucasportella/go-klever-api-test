@@ -49,10 +49,28 @@ message ListPostsResponse {
   Post post = 1;
 }
 
+message UpVoteRequest {
+  Post post = 2;
+}
+
+message UpVoteResponse {
+  Post post = 1;
+}
+
+message DownVoteRequest {
+  Post post = 2;
+}
+
+message DownVoteResponse {
+  Post post = 1;
+}
+
 service PostService {
   rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
   rpc GetPost(GetPostRequest) returns (GetPostResponse);
   rpc UpdatePost(UpdatePostRequest) returns (UpdatePostResponse);
   rpc DeletePost(DeletePostRequest) returns (DeletePostResponse);
   rpc ListPosts(ListPostsRequest) returns (stream ListPostsResponse);
+  rpc UpVote(UpVoteRequest) returns (UpVoteResponse);
+  rpc DownVote(DownVoteRequest) returns (DownVoteResponse);
 }
