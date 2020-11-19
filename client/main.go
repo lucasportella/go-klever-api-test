@@ -61,14 +61,14 @@ func main() {
 	r.GET("/posts/", func(c *gin.Context) {
 
 		req := &postpb.ListPostsRequest{}
-		_, err := client.ListPosts(c, req)
+		res, err := client.ListPosts(c, req)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": err.Error(),
 			})
 			return
 		}
-		c.JSON(http.StatusOK, &postpb.ListPostsRequest{})
+		c.JSON(http.StatusOK, res)
 	})
 
 	r.DELETE("/posts/:id", func(c *gin.Context) {

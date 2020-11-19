@@ -10,7 +10,7 @@ type PostServiceServer struct {
 }
 
 type Post struct {
-	ID        primitive.ObjectID `json:"_id" bson:"_id"`
+	Id        primitive.ObjectID `json:"_id" bson:"_id"`
 	Title     string             `json:"title" bson:"title"`
 	Content   string             `json:"content" bson:"content"`
 	Votes     int64              `json:"votes" bson:"votes"`

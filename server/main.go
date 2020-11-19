@@ -31,7 +31,7 @@ func (s *PostServiceServer) CreatePost(ctx context.Context, request *postpb.Crea
 	post := request.GetPost()
 
 	data := model.Post{
-		ID:      primitive.NewObjectID(),
+		Id:      primitive.NewObjectID(),
 		Title:   post.GetTitle(),
 		Content: post.GetContent(),
 	}
@@ -77,6 +77,31 @@ func (s *PostServiceServer) GetPost(ctx context.Context, request *postpb.GetPost
 	return response, nil
 }
 
+func (s *PostServiceServer) ListPosts(ctx context.Context, request *postpb.ListPostsRequest) (*postpb.ListPostsResponse, error) {
+
+	filter := bson.M{}
+	data := []*postpb.Post{}
+
+	cursor, _ := postDB.Find(context.TODO(), filter)
+	defer cursor.Close(context.TODO())
+	for cursor.Next(context.TODO()) {
+		var p model.Post
+		err := cursor.Decode(&p)
+		if err != nil {
+			continue
+		}
+		data = append(data, &postpb.Post{
+			Id:      p.Id.Hex(),
+			Title:   p.Title,
+			Content: p.Content,
+			Votes:   p.Votes,
+		})
+	}
+	return &postpb.ListPostsResponse{
+		Post: data,
+	}, nil
+}
+
 func (s *PostServiceServer) DeletePost(ctx context.Context, request *postpb.DeletePostRequest) (*postpb.DeletePostResponse, error) {
 	oid, err := primitive.ObjectIDFromHex(request.GetId())
 	if err != nil {
@@ -95,41 +120,6 @@ func (s *PostServiceServer) DeletePost(ctx context.Context, request *postpb.Dele
 	return &postpb.DeletePostResponse{
 		Success: true,
 	}, nil
-}
-
-func (s *PostServiceServer) ListPosts(request *postpb.ListPostsRequest, stream postpb.PostService_ListPostsServer) error {
-
-	data := &model.Post{}
-
-	cursor, err := postDB.Find(context.Background(), bson.M{})
-	if err != nil {
-		return status.Errorf(codes.Internal, fmt.Sprintf("Unknown internal error: %v", err))
-	}
-
-	defer cursor.Close(context.Background())
-
-	for cursor.Next(context.Background()) {
-
-		err := cursor.Decode(data)
-
-		if err != nil {
-			return status.Errorf(codes.Unavailable, fmt.Sprintf("Could not decode data: %v", err))
-		}
-
-		stream.Send(&postpb.ListPostsResponse{
-			Post: &postpb.Post{
-				Id:      data.ID.Hex(),
-				Content: data.Content,
-				Title:   data.Title,
-				Votes:   data.Votes,
-			},
-		})
-	}
-
-	if err := cursor.Err(); err != nil {
-		return status.Errorf(codes.Internal, fmt.Sprintf("Unkown cursor error: %v", err))
-	}
-	return nil
 }
 
 func (s *PostServiceServer) UpdatePost(ctx context.Context, request *postpb.UpdatePostRequest) (*postpb.UpdatePostResponse, error) {
@@ -163,7 +153,7 @@ func (s *PostServiceServer) UpdatePost(ctx context.Context, request *postpb.Upda
 	}
 	return &postpb.UpdatePostResponse{
 		Post: &postpb.Post{
-			Id:      decoded.ID.Hex(),
+			Id:      decoded.Id.Hex(),
 			Title:   decoded.Title,
 			Content: decoded.Content,
 			Votes:   decoded.Votes,
@@ -196,7 +186,7 @@ func (s *PostServiceServer) UpVote(ctx context.Context, request *postpb.UpVoteRe
 	}
 	return &postpb.UpVoteResponse{
 		Post: &postpb.Post{
-			Id:      decoded.ID.Hex(),
+			Id:      decoded.Id.Hex(),
 			Title:   decoded.Title,
 			Content: decoded.Content,
 			Votes:   decoded.Votes,
@@ -230,7 +220,7 @@ func (s *PostServiceServer) DownVote(ctx context.Context, request *postpb.DownVo
 	}
 	return &postpb.DownVoteResponse{
 		Post: &postpb.Post{
-			Id:      decoded.ID.Hex(),
+			Id:      decoded.Id.Hex(),
 			Title:   decoded.Title,
 			Content: decoded.Content,
 			Votes:   decoded.Votes,

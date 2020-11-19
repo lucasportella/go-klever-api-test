@@ -46,7 +46,7 @@ message DeletePostResponse {
 message ListPostsRequest {}
 
 message ListPostsResponse {
-  Post post = 1;
+  repeated Post post = 1;
 }
 
 message UpVoteRequest {
@@ -70,7 +70,7 @@ service PostService {
   rpc GetPost(GetPostRequest) returns (GetPostResponse);
   rpc UpdatePost(UpdatePostRequest) returns (UpdatePostResponse);
   rpc DeletePost(DeletePostRequest) returns (DeletePostResponse);
-  rpc ListPosts(ListPostsRequest) returns (stream ListPostsResponse);
+  rpc ListPosts(ListPostsRequest) returns (ListPostsResponse);
   rpc UpVote(UpVoteRequest) returns (UpVoteResponse);
   rpc DownVote(DownVoteRequest) returns (DownVoteResponse);
 }
