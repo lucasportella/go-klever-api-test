@@ -19,7 +19,6 @@ func main() {
 
 	client := postpb.NewPostServiceClient(conn)
 
-	// Set up a http server.
 	r := gin.Default()
 
 	r.POST("/posts", func(c *gin.Context) {

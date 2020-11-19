@@ -144,20 +144,15 @@ func (s *PostServiceServer) UpdatePost(ctx context.Context, request *postpb.Upda
 		)
 	}
 
-	// Convert the data to be updated into an unordered Bson document
 	update := bson.M{
 		"title":   post.GetTitle(),
 		"content": post.GetContent(),
 	}
 
-	// Convert the oid into an unordered bson document to search by id
 	filter := bson.M{"_id": oid}
 
-	// Result is the BSON encoded result
-	// To return the updated document instead of original we have to add options.
 	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
 
-	// Decode result and write it to 'decoded'
 	decoded := model.Post{}
 	err = result.Decode(&decoded)
 	if err != nil {
@@ -187,19 +182,10 @@ func (s *PostServiceServer) UpVote(ctx context.Context, request *postpb.UpVoteRe
 		)
 	}
 
-	// Convert the data to be updated into an unordered Bson document
-	update := bson.M{
-		"votes": post.GetVotes(),
-	}
-
-	// Convert the oid into an unordered bson document to search by id
 	filter := bson.M{"_id": oid}
 
-	// Result is the BSON encoded result
-	// To return the updated document instead of original we have to add options.
-	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$inc": bson.M{"votes": 1}}, options.FindOneAndUpdate().SetReturnDocument(1))
 
-	// Decode result and write it to 'decoded'
 	decoded := model.Post{}
 	err = result.Decode(&decoded)
 	if err != nil {
@@ -230,19 +216,10 @@ func (s *PostServiceServer) DownVote(ctx context.Context, request *postpb.DownVo
 		)
 	}
 
-	// Convert the data to be updated into an unordered Bson document
-	update := bson.M{
-		"votes": post.GetVotes(),
-	}
-
-	// Convert the oid into an unordered bson document to search by id
 	filter := bson.M{"_id": oid}
 
-	// Result is the BSON encoded result
-	// To return the updated document instead of original we have to add options.
-	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$set": update}, options.FindOneAndUpdate().SetReturnDocument(1))
+	result := postDB.FindOneAndUpdate(ctx, filter, bson.M{"$inc": bson.M{"votes": -1}}, options.FindOneAndUpdate().SetReturnDocument(1))
 
-	// Decode result and write it to 'decoded'
 	decoded := model.Post{}
 	err = result.Decode(&decoded)
 	if err != nil {
