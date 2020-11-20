@@ -18,6 +18,9 @@ The Technical Challenge consists of creating an API with Golang using gRPC with 
 
   - Deliver the whole solution running in some free cloud service
 
+## Postman
+
+[Collection Link](https://www.getpostman.com/collections/3ef276a55fe65e4857f5)
 
 
 ## How to run
