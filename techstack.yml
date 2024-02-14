@@ -1,0 +1,181 @@
+repo_name: lucasportella/go-klever-api-test
+report_id: 3c6b779edba128a74e06cf155ec44da6
+version: 0.1
+repo_type: Public
+timestamp: '2024-02-14T15:13:20+00:00'
+requested_by: roneycharles
+provider: github
+branch: main
+detected_tools_count: 12
+tools:
+- name: Golang
+  description: An open source programming language that makes it easy to build simple,
+    reliable, and efficient software
+  website_url: http://golang.org/
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1005/O6AczwfV_400x400.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test
+  detection_source: Repo Metadata
+- name: Gin Gonic
+  description: HTTP web framework written in Go
+  website_url: https://gin-gonic.com/
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/4221/7894478.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.mod
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-18 22:58:19.000000000 Z
+- name: gRPC
+  description: A high performance, open-source universal RPC framework
+  website_url: https://grpc.io/
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Remote Procedure Call (RPC)
+  image_url: https://img.stackshare.io/service/4670/default_d811b0ac72205af84aca21f967594338580be913.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.mod
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-18 00:57:43.000000000 Z
+- name: MongoDB
+  description: The database for giant ideas
+  website_url: http://www.mongodb.com/
+  open_source: true
+  hosted_saas: false
+  category: Data Stores
+  sub_category: Databases
+  image_url: https://img.stackshare.io/service/1030/leaf-360x360.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.mod
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-18 00:57:43.000000000 Z
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test
+  detection_source: Repo Metadata
+- name: gin
+  description: Gin is a HTTP web framework written in Go
+  package_url: https://pkg.go.dev/github.com/gin-gonic/gin
+  version: 1.6.3
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-18 00:57:43.000000000 Z
+  vulnerabilities:
+  - name: Inconsistent Interpretation of HTTP Requests in github.com/gin-gonic/gin
+    cve_id: CVE-2020-28483
+    cve_url: https://github.com/advisories/GHSA-h395-qcrw-5vmq
+    detected_date: Aug 22
+    severity: high
+    first_patched: 1.7.0
+- name: net
+  description: Go supplementary network libraries
+  package_url: https://pkg.go.dev/golang.org/x/net
+  version: 0.0.0
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-18 00:57:43.000000000 Z
+- name: proto
+  description: Go support for Google's protocol buffers
+  package_url: https://pkg.go.dev/github.com/golang/protobuf/proto
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.mod
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-19 06:28:22.000000000 Z
+- name: protobuf
+  description: Go support for Google's protocol buffers
+  package_url: https://pkg.go.dev/github.com/golang/protobuf
+  version: 1.2.0
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-19 06:28:22.000000000 Z
+- name: reflect2
+  description: Reflect api without runtime reflect.Value cost
+  package_url: https://pkg.go.dev/github.com/modern-go/reflect2
+  version: 0.0.0
+  license: Apache-2.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-19 06:28:22.000000000 Z
+- name: sys
+  description: Go packages for low-level interaction with the operating system
+  package_url: https://pkg.go.dev/golang.org/x/sys
+  version: 0.0.0
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-18 00:57:43.000000000 Z
+- name: yaml.v2
+  description: YAML support for the Go language
+  package_url: https://pkg.go.dev/gopkg.in/yaml.v2
+  version: 2.2.2
+  license: LGPL-3.0
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: Go Modules Packages
+  image_url: https://img.stackshare.io/package/go-packages/image.png
+  detection_source_url: https://github.com/lucasportella/go-klever-api-test/blob/main/go.sum
+  detection_source: go.mod
+  last_updated_by: roneycharles
+  last_updated_on: 2020-11-19 06:28:22.000000000 Z
+  vulnerabilities:
+  - name: Excessive Platform Resource Consumption within a Loop in Kubernetes
+    cve_id: CVE-2019-11254
+    cve_url: https://github.com/advisories/GHSA-wxc4-f4m6-wwqv
+    detected_date: Jan 28
+    severity: moderate
+    first_patched: 2.2.8
